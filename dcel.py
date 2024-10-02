@@ -1,9 +1,10 @@
+import math
+
 class Vertex:
     def __init__(self, x, y):
         self.x = x  # X-coordinate
         self.y = y  # Y-coordinate
         self.incident_half_edge = None  # Pointer to an incident half-edge
-
 
 class HalfEdge:
     def __init__(self, origin):
@@ -15,17 +16,16 @@ class HalfEdge:
     def destination(self):
         return self.next.origin if self.next else None
 
-
 class Face:
     def __init__(self):
         self.outer_half_edge = None  # Pointer to one of the half-edges of the face
-
 
 class DCEL:
     def __init__(self):
         self.vertices = []  # List to store all vertices
         self.half_edges = []  # List to store all half-edges
         self.faces = []  # List to store all faces
+        self.diagonals = []  # List to store diagonals
 
     def add_vertex(self, x, y):
         vertex = Vertex(x, y)
@@ -67,24 +67,97 @@ class DCEL:
         for he in self.half_edges:
             he.face = face
 
+    def add_diagonal(self, vertex1, vertex2):
+        """Adds a diagonal edge between vertex1 and vertex2."""
+        # Create half-edges for the diagonal
+        he1 = self.add_half_edge(vertex1)
+        he2 = self.add_half_edge(vertex2)
+
+        # Connect the half-edges
+        self.connect_half_edges(he1, he2)
+
+        # Store the diagonal in the diagonals list
+        self.diagonals.append((vertex1, vertex2))
+
+    def angle_between(self, v1, v2, v3):
+        """Calculate the angle at v2 formed by v1 and v3, considering direction."""
+        # Create vectors
+        vec_a = (v1.x - v2.x, v1.y - v2.y)  # Vector from v2 to v1
+        vec_b = (v3.x - v2.x, v3.y - v2.y)  # Vector from v2 to v3
+        
+        # Calculate the angle using atan2
+        angle_a = math.atan2(vec_a[1], vec_a[0])  # Angle of vector a
+        angle_b = math.atan2(vec_b[1], vec_b[0])  # Angle of vector b
+        
+        # Calculate the difference and normalize to [0, 360]
+        angle_diff = math.degrees(angle_b - angle_a)
+        if angle_diff < 0:
+            angle_diff += 360
+            
+        return angle_diff  # Angle in degrees
+
+    def find_vertices(self):
+        start_vertices = []
+        end_vertices = []
+        min_cusp_vertices = []
+        max_cusp_vertices = []
+
+        for i, vertex in enumerate(self.vertices):
+            prev_vertex = self.vertices[i - 1]  # Previous vertex
+            next_vertex = self.vertices[(i + 1) % len(self.vertices)]  # Next vertex
+            
+            angle = self.angle_between(prev_vertex, vertex, next_vertex)
+
+            # Check conditions for start vertex
+            if (prev_vertex.y < vertex.y and next_vertex.y < vertex.y and angle > 180):
+                start_vertices.append(vertex)
+            
+            # Check conditions for end vertex
+            elif (prev_vertex.y > vertex.y and next_vertex.y > vertex.y and angle > 180):
+                end_vertices.append(vertex)
+                
+            # Check conditions for min cusp vertex
+            elif (prev_vertex.y < vertex.y and next_vertex.y < vertex.y and angle < 180):
+                max_cusp_vertices.append(vertex)
+
+            # Check conditions for max cusp vertex
+            elif (prev_vertex.y > vertex.y and next_vertex.y > vertex.y and angle < 180):
+                min_cusp_vertices.append(vertex)
+
+        return {
+            "start_vertices": start_vertices,
+            "end_vertices": end_vertices,
+            "min_cusp_vertices": min_cusp_vertices,
+            "max_cusp_vertices": max_cusp_vertices,
+        }
+
     def display(self):
         print("Vertices:")
         for vertex in self.vertices:
             print(f"({vertex.x}, {vertex.y})")
 
-        print("\nHalf-Edges:")
-        for half_edge in self.half_edges:
-            print(f"Origin: ({half_edge.origin.x}, {half_edge.origin.y})")
-
-        print("\nFaces:")
-        for face in self.faces:
-            print("Face with outer half-edge starting at:", face.outer_half_edge.origin)
-
-
 # Example Usage
 if __name__ == "__main__":
     dcel = DCEL()
-    # Example points representing a simple polygon (in this case, a triangle)
-    points = [(0, 0), (100, 0), (50, 50)]
+    # Use the provided points list representing a polygon
+    points = [(0, 0), (50, 50), (100, 0), (150, 75), (100, 200), (50, 100), (25, 200)]
     dcel.construct_polygon(points)
-    dcel.display()
+
+    # Find and display the vertex types
+    vertex_types = dcel.find_vertices()
+
+    print("\nStart Vertices:")
+    for vertex in vertex_types["start_vertices"]:
+        print(f"({vertex.x}, {vertex.y})")
+    
+    print("\nEnd Vertices:")
+    for vertex in vertex_types["end_vertices"]:
+        print(f"({vertex.x}, {vertex.y})")
+    
+    print("\nMin Cusp Vertices:")
+    for vertex in vertex_types["min_cusp_vertices"]:
+        print(f"({vertex.x}, {vertex.y})")
+    
+    print("\nMax Cusp Vertices:")
+    for vertex in vertex_types["max_cusp_vertices"]:
+        print(f"({vertex.x}, {vertex.y})")

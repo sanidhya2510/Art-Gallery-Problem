@@ -13,37 +13,16 @@ class MonotonePartitioningApp:
 
     def draw_monotone_partitioning(self):
         vertices = sorted(self.dcel.vertices, key=lambda v: v.y, reverse=True)  # Sort vertices top to bottom
+        vertex_types = self.dcel.find_vertices()
         for vertex in vertices:
-            # Check if the vertex is an interior cusp
-            is_cusp, cusp_type = self.check_if_cusp(vertex)
-            if is_cusp:
-                print("cusp")
-                # Handle minimum cusp (downward cusp)
-                if cusp_type == 'min':
-                    self.handle_min_cusp(vertex)
-
-                # Handle maximum cusp (upward cusp)
-                elif cusp_type == 'max':
-                    self.handle_max_cusp(vertex)
-
+            self.trapezoidal_app.remove_horizontal_line(vertex)
+            self.canvas.update()
+            if vertex in vertex_types["min_cusp_vertices"]:
+                self.handle_min_cusp(vertex)
+            elif vertex in vertex_types["max_cusp_vertices"]:
+                self.handle_max_cusp(vertex)
+            
             time.sleep(0.4)  # Delay between each step for visualization
-
-    def check_if_cusp(self, vertex):
-        incident_edge = vertex.incident_half_edge
-        if incident_edge is None:
-            return False, None  # Not a cusp if no incident edge
-
-        prev_vertex = incident_edge.twin.next.destination if incident_edge.twin else None
-        next_vertex = incident_edge.next.destination if incident_edge.next else None
-
-        if prev_vertex and next_vertex:
-            # Check if the vertex forms an upward cusp (max) or downward cusp (min)
-            if prev_vertex.y > vertex.y and next_vertex.y > vertex.y:
-                return True, 'min'
-            elif prev_vertex.y < vertex.y and next_vertex.y < vertex.y:
-                return True, 'max'
-
-        return False, None
 
 
     def handle_min_cusp(self, vertex):
