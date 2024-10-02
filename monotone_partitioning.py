@@ -21,8 +21,9 @@ class MonotonePartitioningApp:
                 self.handle_min_cusp(vertex)
             elif vertex in vertex_types["max_cusp_vertices"]:
                 self.handle_max_cusp(vertex)
-            
-            time.sleep(0.4)  # Delay between each step for visualization
+        self.trapezoidal_app.reset_canvas();
+        self.canvas.update()    
+            # time.sleep(0.4)  # Delay between each step for visualization
 
     def handle_min_cusp(self, vertex):
         """Handle downward cusps by connecting the vertex to the supporting vertex of the trapezoid below."""

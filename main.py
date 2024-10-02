@@ -13,14 +13,14 @@ def generate_polygon():
 
 def trapezoidalisation():
     if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
-        app = trapezoidalisation_module.TrapezoidalisationApp(canvas, polygon_app.dcel)
-        app.draw_trapezoidalisation()
+        global trapezoidal_app
+        trapezoidal_app = trapezoidalisation_module.TrapezoidalisationApp(canvas, polygon_app.dcel)
+        trapezoidal_app.draw_trapezoidalisation()
     else:
         messagebox.showwarning("Warning", "Please generate a polygon first.")
 
 def monotone_partitioning():
     if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
-        trapezoidal_app = trapezoidalisation_module.TrapezoidalisationApp(canvas, polygon_app.dcel)
         app = monotone_partitioning_module.MonotonePartitioningApp(canvas, polygon_app.dcel, trapezoidal_app)
         app.draw_monotone_partitioning()
     else:
