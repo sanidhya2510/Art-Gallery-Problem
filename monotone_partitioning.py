@@ -15,15 +15,14 @@ class MonotonePartitioningApp:
         vertices = sorted(self.dcel.vertices, key=lambda v: v.y, reverse=True)  # Sort vertices top to bottom
         vertex_types = self.dcel.find_vertices()
         for vertex in vertices:
-            self.trapezoidal_app.remove_horizontal_line(vertex)
-            self.canvas.update()
             if vertex in vertex_types["min_cusp_vertices"]:
                 self.handle_min_cusp(vertex)
             elif vertex in vertex_types["max_cusp_vertices"]:
                 self.handle_max_cusp(vertex)
-        self.trapezoidal_app.reset_canvas();
-        self.canvas.update()    
-            # time.sleep(0.4)  # Delay between each step for visualization
+            self.trapezoidal_app.remove_horizontal_line(vertex)
+            self.canvas.update()
+            time.sleep(0.4)  # Delay between each step for visualization 
+            
 
     def handle_min_cusp(self, vertex):
         """Handle downward cusps by connecting the vertex to the supporting vertex of the trapezoid below."""

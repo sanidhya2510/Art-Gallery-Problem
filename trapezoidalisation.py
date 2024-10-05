@@ -17,7 +17,7 @@ class TrapezoidalisationApp:
         for vertex in vertices:
             self.draw_horizontal_line(vertex)
             self.canvas.update()
-            # time.sleep(0.4)  # Delay between each line for visualization
+            time.sleep(0.4)  # Delay between each line for visualization
             # self.remove_horizontal_line(vertex)  # Remove the line after it's drawn
 
     def draw_horizontal_line(self, vertex):

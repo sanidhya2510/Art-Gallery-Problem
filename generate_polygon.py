@@ -96,6 +96,6 @@ class GeneratePolygonApp:
             
             # Update the canvas to show the connecting line
             self.canvas.update()
-            # time.sleep(0.4)
+            time.sleep(0.4)
 
 # Example usage within the main application will be handled as before.

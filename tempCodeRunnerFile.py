@@ -3,7 +3,6 @@ from tkinter import messagebox
 import generate_polygon as generate_polygon_module
 import trapezoidalisation as trapezoidalisation_module
 import monotone_partitioning as monotone_partitioning_module
-import triangulation as triangulation_module
 
 # Function stubs for each button's functionality
 def generate_polygon():
@@ -22,19 +21,13 @@ def trapezoidalisation():
 
 def monotone_partitioning():
     if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
-         global monotone_app 
-         monotone_app = monotone_partitioning_module.MonotonePartitioningApp(canvas, polygon_app.dcel, trapezoidal_app)
-         monotone_app.draw_monotone_partitioning()
+        app = monotone_partitioning_module.MonotonePartitioningApp(canvas, polygon_app.dcel, trapezoidal_app)
+        app.draw_monotone_partitioning()
     else:
         messagebox.showwarning("Warning", "Please generate a polygon first.")
 
 def triangulation():
-    if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
-         global triangulation_app 
-         triangulation_app = triangulation_module.TriangulationApp(canvas, polygon_app.dcel, monotone_app)
-         triangulation_module.draw_monotone_partitioning()
-    else:
-        messagebox.showwarning("Warning", "Please generate a polygon first.")
+    messagebox.showinfo("Action", "Triangulation")
 
 def dual_graph():
     messagebox.showinfo("Action", "Dual Graph")
