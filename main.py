@@ -4,6 +4,7 @@ import generate_polygon as generate_polygon_module
 import trapezoidalisation as trapezoidalisation_module
 import monotone_partitioning as monotone_partitioning_module
 import triangulation as triangulation_module
+import dual_graph as dual_graph_module
 
 # Function stubs for each button's functionality
 def generate_polygon():
@@ -32,12 +33,17 @@ def triangulation():
     if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
          global triangulation_app 
          triangulation_app = triangulation_module.TriangulationApp(canvas, polygon_app.dcel, monotone_app)
-         triangulation_module.draw_monotone_partitioning()
+         triangulation_app.triangulate_polygon()
     else:
         messagebox.showwarning("Warning", "Please generate a polygon first.")
 
 def dual_graph():
-    messagebox.showinfo("Action", "Dual Graph")
+    if polygon_app and polygon_app.dcel:
+        global dual_graph_App
+        dual_graph_app = dual_graph_module.DualGraphApp(canvas, polygon_app.dcel, triangulation_app)
+        dual_graph_app.create_dual_graph()
+    else:
+        messagebox.showwarning("Warning", "Please generate a polygon first. ")
 
 def three_coloring():
     messagebox.showinfo("Action", "3 Coloring")

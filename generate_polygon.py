@@ -23,6 +23,7 @@ class GeneratePolygonApp:
             self.canvas.delete("all")  # Clear canvas for new polygon
             self.draw_axes()  # Draw positive coordinate axes
             self.points = self.generate_random_points(self.num_vertices)
+            self.points = self.check_for_invalid_edges(self.points)  # Ensure no vertical or horizontal edges
             centroid = self.calculate_centroid(self.points)
             sorted_points = self.sort_points_anticlockwise(self.points, centroid)
             
@@ -47,10 +48,31 @@ class GeneratePolygonApp:
         self.canvas.create_text(origin_x - 10, origin_y - self.axis_length - 10, text="Y", fill="black", font=("Arial", 10))
 
     def generate_random_points(self, n):
-        # Generate n random points within the first quadrant (positive X and Y axes)
-        points = [(random.randint(0, self.axis_length),
-                   random.randint(0, self.axis_length)) for _ in range(n)]
-        return points
+        # Generate random points ensuring no horizontal or vertical adjacent edges
+        points = set()  # Use a set to avoid duplicate points
+        while len(points) < n:
+            x = random.randint(0, self.axis_length)
+            y = random.randint(0, self.axis_length)
+            points.add((x, y))
+
+        return list(points)  # Return as a list for sorting
+
+    def check_for_invalid_edges(self, points):
+        # Ensure that no two adjacent points have the same x or y coordinates
+        def has_invalid_edge(p1, p2):
+            return p1[0] == p2[0] or p1[1] == p2[1]  # Check for vertical or horizontal edges
+
+        valid_points = points.copy()
+        for i in range(len(points)):
+            current_point = points[i]
+            next_point = points[(i + 1) % len(points)]  # Wrap around to check the last and first point
+            if has_invalid_edge(current_point, next_point):
+                # If a vertical or horizontal edge is found, generate a new valid point
+                while has_invalid_edge(current_point, next_point):
+                    next_point = (random.randint(0, self.axis_length), random.randint(0, self.axis_length))
+                valid_points[i] = next_point  # Update the invalid point with a new one
+
+        return valid_points
 
     def calculate_centroid(self, points):
         # Calculate the centroid of a set of points
@@ -97,5 +119,3 @@ class GeneratePolygonApp:
             # Update the canvas to show the connecting line
             self.canvas.update()
             time.sleep(0.4)
-
-# Example usage within the main application will be handled as before.

@@ -129,3 +129,16 @@ class MonotonePartitioningApp:
         # Update DCEL: Add a new half-edge for the diagonal
         self.dcel.add_diagonal(vertex1, vertex2)
         
+    def draw_diagonal_only(self, vertex1, vertex2):
+        x1, y1 = vertex1.x, vertex1.y
+        x2, y2 = vertex2.x, vertex2.y
+
+        # Adjust coordinates to fit within the positive axes
+        adjusted_x1 = self.origin_x + x1
+        adjusted_y1 = self.origin_y - y1
+        adjusted_x2 = self.origin_x + x2
+        adjusted_y2 = self.origin_y - y2
+
+        # Draw the diagonal on the canvas
+        self.canvas.create_line(adjusted_x1, adjusted_y1, adjusted_x2, adjusted_y2, fill="red")
+        
