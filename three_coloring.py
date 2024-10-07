@@ -68,7 +68,6 @@ class ThreeColoringApp():
             self.color_vertex(k, self.colored_vertices[k])
 
     def color_vertex(self, vertex, color):
-        """Draw the vertex with the given color."""
         adjusted_x = self.origin_x + vertex.x
         adjusted_y = self.origin_y - vertex.y
         self.canvas.create_oval(adjusted_x - 5, adjusted_y - 5, adjusted_x + 5, adjusted_y + 5, fill=color)    

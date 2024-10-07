@@ -165,21 +165,17 @@ class DCEL:
         
 
     def angle_between(self, v1, v2, v3):
-        """Calculate the angle at v2 formed by v1 and v3, considering direction."""
-        # Create vectors
-        vec_a = (v1.x - v2.x, v1.y - v2.y)  # Vector from v2 to v1
-        vec_b = (v3.x - v2.x, v3.y - v2.y)  # Vector from v2 to v3
+        vec_a = (v1.x - v2.x, v1.y - v2.y)
+        vec_b = (v3.x - v2.x, v3.y - v2.y) 
         
-        # Calculate the angle using atan2
-        angle_a = math.atan2(vec_a[1], vec_a[0])  # Angle of vector a
-        angle_b = math.atan2(vec_b[1], vec_b[0])  # Angle of vector b
+        angle_a = math.atan2(vec_a[1], vec_a[0])
+        angle_b = math.atan2(vec_b[1], vec_b[0]) 
         
-        # Calculate the difference and normalize to [0, 360]
         angle_diff = math.degrees(angle_b - angle_a)
         if angle_diff < 0:
             angle_diff += 360
             
-        return angle_diff  # Angle in degrees
+        return angle_diff 
 
     def find_vertices(self):
         start_vertices = []
@@ -188,24 +184,20 @@ class DCEL:
         max_cusp_vertices = []
 
         for i, vertex in enumerate(self.vertices):
-            prev_vertex = self.vertices[i - 1]  # Previous vertex
-            next_vertex = self.vertices[(i + 1) % len(self.vertices)]  # Next vertex
+            prev_vertex = self.vertices[i - 1] 
+            next_vertex = self.vertices[(i + 1) % len(self.vertices)] 
             
             angle = self.angle_between(prev_vertex, vertex, next_vertex)
 
-            # Check conditions for start vertex
             if (prev_vertex.y < vertex.y and next_vertex.y < vertex.y and angle > 180):
                 start_vertices.append(vertex)
             
-            # Check conditions for end vertex
             elif (prev_vertex.y > vertex.y and next_vertex.y > vertex.y and angle > 180):
                 end_vertices.append(vertex)
-                
-            # Check conditions for min cusp vertex
+         
             elif (prev_vertex.y < vertex.y and next_vertex.y < vertex.y and angle < 180):
                 max_cusp_vertices.append(vertex)
 
-            # Check conditions for max cusp vertex
             elif (prev_vertex.y > vertex.y and next_vertex.y > vertex.y and angle < 180):
                 min_cusp_vertices.append(vertex)
 
@@ -226,54 +218,28 @@ class DCEL:
             if face.outer_half_edge:
                 half_edge = face.outer_half_edge
                 print("Face:")
-            # List to store the vertices of the current face
                 vertices = []
-            # Start traversing from the outer_half_edge of the face
                 start_half_edge = half_edge
                 while True:
                     
                     origin_vertex = half_edge.origin
-                # Append the vertex coordinates to the list
                     vertices.append((origin_vertex.x, origin_vertex.y))
-                # Move to the next half edge in the face boundary
                     half_edge = half_edge.next
-                # Stop when we've looped back to the starting half edge
                     if half_edge == start_half_edge or half_edge == None:
                         break
-            # Print the vertices of the face
                 print(vertices)
 
 
 
 
-if __name__ == "__main__":
-    dcel = DCEL()
-    # Use the provided points list representing a polygon
-    points = [(50, 0), (100, 50), (75, 75), (100, 100), (50, 150), (0, 100), (25, 75), (0, 50)]
-    # points = [(0, 0), (1, 0), (1, 1), (0, 1)]
-    dcel.construct_polygon(points)
-
-    # Find and display the vertex types
-    vertex_types = dcel.find_vertices()
-
-    # print("\nStart Vertices:")
-    # for vertex in vertex_types["start_vertices"]:
-    #     print(f"({vertex.x}, {vertex.y})")
-    
-    # print("\nEnd Vertices:")
-    # for vertex in vertex_types["end_vertices"]:
-    #     print(f"({vertex.x}, {vertex.y})")
-    
-    # print("\nMin Cusp Vertices:")
-    # for vertex in vertex_types["min_cusp_vertices"]:
-    #     print(f"({vertex.x}, {vertex.y})")
-    
-    # print("\nMax Cusp Vertices:")
-    # for vertex in vertex_types["max_cusp_vertices"]:
-    #     print(f"({vertex.x}, {vertex.y})")
+# if __name__ == "__main__":
+#     dcel = DCEL()
+#     points = [(50, 0), (100, 50), (75, 75), (100, 100), (50, 150), (0, 100), (25, 75), (0, 50)]
+#     dcel.construct_polygon(points)
+#     vertex_types = dcel.find_vertices()
         
-    dcel.add_diagonal(dcel.vertices[1], dcel.vertices[6])
-    dcel.add_diagonal(dcel.vertices[7], dcel.vertices[1])
-    print(dcel.faces)
-    dcel.print_faces()
+#     dcel.add_diagonal(dcel.vertices[1], dcel.vertices[6])
+#     dcel.add_diagonal(dcel.vertices[7], dcel.vertices[1])
+#     print(dcel.faces)
+#     dcel.print_faces()
         
