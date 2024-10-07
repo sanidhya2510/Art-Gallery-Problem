@@ -19,6 +19,7 @@ class HalfEdge:
 class Face:
     def __init__(self):
         self.outer_half_edge = None 
+        self.number = 0
 
 class DCEL:
     def __init__(self):

@@ -81,7 +81,7 @@ def three_coloring():
     if polygon_app and polygon_app.dcel:
         global three_coloring_app
         three_coloring_app = three_coloring_module.ThreeColoringApp(canvas, polygon_app.dcel, dual_graph_app)
-        
+        three_coloring_app.three_color_triangulation()
         # Enable the next button (Vertex Guards)
         update_button_states(vertex_guards_btn)
     else:

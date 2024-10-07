@@ -8,72 +8,66 @@ class ThreeColoringApp():
         self.padding = 50
         self.origin_x = self.padding
         self.origin_y = self.canvas_height - self.padding
-        self.colors = ["brown", "yellow", "green"]
+        self.colors = ["Blue", "yellow", "green"]
+        self.face_and_vertices = {}
+    
+    
+    def coloring_dfs(self, current_face, visited_faces, colored_vertices, graph):
+        if current_face in visited_faces:
+            return 
+        visited_faces.append(current_face)
+        # print(self.face_and_vertices)
+        vertex1 = self.face_and_vertices[current_face][0]
+        vertex2 = self.face_and_vertices[current_face][1]
+        vertex3 = self.face_and_vertices[current_face][2]
+    
+        if vertex1 not in colored_vertices and vertex2 not in colored_vertices and vertex3 not in colored_vertices:
+            colored_vertices[vertex1] = "Yellow"
+            colored_vertices[vertex2] = "Green"
+            colored_vertices[vertex3] = "Blue"
+        elif vertex1 not in colored_vertices:
+            colors_list = ["Yellow", "Green", "Blue"]
+            for color in colors_list:
+                if colored_vertices[vertex2] != color and colored_vertices[vertex3] != color:
+                    colored_vertices[vertex1] = color
+        elif vertex2 not in colored_vertices:
+            colors_list = ["Yellow", "Green", "Blue"]
+            for color in colors_list:
+                if colored_vertices[vertex1] != color and colored_vertices[vertex3] != color:
+                    colored_vertices[vertex2] = color
+        elif vertex3 not in colored_vertices:
+            colors_list = ["Yellow", "Green", "Blue"]
+            for color in colors_list:
+                if colored_vertices[vertex2] != color and colored_vertices[vertex1] != color:
+                    colored_vertices[vertex3] = color
+        
+        for child_faces in graph[current_face]:
+            self.coloring_dfs(child_faces, visited_faces, colored_vertices, graph)
     
     def three_color_triangulation(self):
-        # Store colors of vertices
-        vertex_colors = {}
-
-        # Get the centroids and edges from the dual graph
-        centroids = self.dual_graph_app.get_centroids()
-
-        # Start with the first face in the triangulation and assign colors to its vertices
-        first_face = list(self.dcel.faces)[0]
-        if first_face.outer_half_edge:
-            vertices = self.get_face_vertices(first_face)
-            # Assign three different colors to the vertices of the first triangle
-            for i, vertex in enumerate(vertices):
-                vertex_colors[vertex] = self.colors[i % 3]
-                self.color_vertex(vertex, vertex_colors[vertex])
-
-        # Now traverse the dual graph to color the rest of the triangulation
+        face_and_vertices = {}
+        # face_count = 1
         for face in self.dcel.faces:
-            if face.outer_half_edge:
-                half_edge = face.outer_half_edge
-                start_edge = half_edge
-                # Traverse the edges of each face (triangle)
-                while True:
-                    twin_edge = half_edge.twin
-                    if twin_edge and twin_edge.incident_face and twin_edge.incident_face != first_face:
-                        # Get the common edge's vertices
-                        common_vertices = self.get_common_edge_vertices(half_edge)
-                        if common_vertices:
-                            # Get the uncolored vertex of the adjacent triangle
-                            uncolored_vertex = self.get_uncolored_vertex(twin_edge.incident_face, vertex_colors)
-                            if uncolored_vertex:
-                                # Assign the third color (the one not used by the common edge)
-                                used_colors = {vertex_colors[common_vertices[0]], vertex_colors[common_vertices[1]]}
-                                uncolored_vertex_color = next(color for color in self.colors if color not in used_colors)
-                                vertex_colors[uncolored_vertex] = uncolored_vertex_color
-                                self.color_vertex(uncolored_vertex, uncolored_vertex_color)
+            # print(f"Face {face_count}:")
+            looping_edge = face.outer_half_edge
+            starting_vertex = looping_edge.origin
+            vertex_list = []
 
-                    half_edge = half_edge.next
-                    if half_edge == start_edge:
-                        break
-
-    def get_face_vertices(self, face):
-        """Get the vertices of a given face."""
-        vertices = []
-        half_edge = face.outer_half_edge
-        start_edge = half_edge
-        while True:
-            vertices.append(half_edge.origin)
-            half_edge = half_edge.next
-            if half_edge == start_edge:
-                break
-        return vertices
-
-    def get_common_edge_vertices(self, half_edge):
-        """Get the vertices of a common edge between two triangles."""
-        return [half_edge.origin, half_edge.next.origin]
-
-    def get_uncolored_vertex(self, face, vertex_colors):
-        """Find the uncolored vertex in a given triangle."""
-        vertices = self.get_face_vertices(face)
-        for vertex in vertices:
-            if vertex not in vertex_colors:
-                return vertex
-        return None
+            while True:
+                vertex_list.append(looping_edge.origin)
+                looping_edge = looping_edge.next
+                if looping_edge.origin == starting_vertex:
+                    break
+                
+            self.face_and_vertices[face] = vertex_list
+            # print(vertex_list)
+        visited_faces = []
+        colored_vertices = {}
+        starting_face = self.dcel.faces[0]
+        self.coloring_dfs(starting_face, visited_faces, colored_vertices, self.dual_graph_app.graph)
+        for k in colored_vertices:
+            print(f"({k.x}, {k.y}), {colored_vertices[k]}")
+            self.color_vertex(k, colored_vertices[k])
 
     def color_vertex(self, vertex, color):
         """Draw the vertex with the given color."""

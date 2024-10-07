@@ -11,6 +11,7 @@ class DualGraphApp:
         self.origin_x = self.padding
         self.origin_y = self.canvas_height - self.padding
         self.axis_length = self.canvas_width - 2 * self.padding  # Length of positive axes
+        self.graph = {}
     
     def transform_coordinates(self, x, y):
         """Transforms (x, y) to fit canvas and invert y-axis."""
@@ -25,11 +26,14 @@ class DualGraphApp:
         print(f"Number of faces: {len(self.dcel.faces)}")
         
         # Loop through each face in the DCEL to calculate its centroid
+        face_count = 1
         for face in self.dcel.faces:
             if face.outer_half_edge:
                 vertices = []
                 half_edge = face.outer_half_edge
                 start_edge = half_edge
+                face.number = face_count
+                face_count+=1
                 
                 # Collect the vertices of the face (triangle)
                 while True:
@@ -72,7 +76,23 @@ class DualGraphApp:
                         transformed_centroid2 = self.transform_coordinates(centroid2[0], centroid2[1])
                         
                         self.draw_line(transformed_centroid1, transformed_centroid2)
-
+                        
+                        # if face.number not in self.graph:
+                        #     self.graph[face.number] = []
+                          
+                        # if twin_edge.incident  
+                        # self.graph[face.number].append(twin_edge.incident_face.number)
+                        # self.graph[twin_edge.incident_face.number].append(face.number)
+                        
+                        if face not in self.graph:
+                            self.graph[face] = []
+                          
+                        if twin_edge.incident_face not in self.graph:
+                            self.graph[twin_edge.incident_face] = []
+                            
+                        self.graph[face].append(twin_edge.incident_face)
+                        self.graph[twin_edge.incident_face].append(face)
+                        
                     half_edge = half_edge.next
                     if half_edge == start_edge:
                         break
