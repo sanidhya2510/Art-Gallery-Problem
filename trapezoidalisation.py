@@ -1,9 +1,10 @@
 import time
 
 class TrapezoidalisationApp:
-    def __init__(self, canvas, dcel):
+    def __init__(self, canvas, dcel, polygon_app):
         self.canvas = canvas
         self.dcel = dcel
+        self.polygon_app = polygon_app
         self.canvas_width = 500
         self.canvas_height = 500
         self.padding = 50  # Padding for the axes and graph

@@ -6,7 +6,7 @@ import monotone_partitioning as monotone_partitioning_module
 import triangulation as triangulation_module
 import dual_graph as dual_graph_module
 import three_coloring as three_coloring_module
-
+import vertex_guards as vertex_guards_module
 # Function to disable all buttons except Generate Polygon and the next button
 def update_button_states(next_button=None):
     trapezoidal_btn.config(state=tk.DISABLED)
@@ -36,7 +36,7 @@ def generate_polygon():
 def trapezoidalisation():
     if polygon_app and polygon_app.dcel:  # Check if the polygon has been generated
         global trapezoidal_app
-        trapezoidal_app = trapezoidalisation_module.TrapezoidalisationApp(canvas, polygon_app.dcel)
+        trapezoidal_app = trapezoidalisation_module.TrapezoidalisationApp(canvas, polygon_app.dcel, polygon_app)
         trapezoidal_app.draw_trapezoidalisation()
 
         # Enable the next button (Monotone Partitioning)
@@ -88,7 +88,13 @@ def three_coloring():
         messagebox.showwarning("Warning", "Please generate a polygon first.")  
 
 def vertex_guards():
-    messagebox.showinfo("Action", "Vertex Guards")
+    if polygon_app and polygon_app.dcel:
+        global vertex_guards_app
+        vertex_guards_app = vertex_guards_module.VertexGuardsApp(canvas, polygon_app.dcel, three_coloring_app)
+        vertex_guards_app.decide_vertex_guards()
+        update_button_states()
+    else:
+        messagebox.showwarning("Warning", "Please generate a polygon first.")  
 
 # Main window setup
 root = tk.Tk()

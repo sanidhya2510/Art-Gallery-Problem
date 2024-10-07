@@ -8,11 +8,10 @@ class ThreeColoringApp():
         self.padding = 50
         self.origin_x = self.padding
         self.origin_y = self.canvas_height - self.padding
-        self.colors = ["Blue", "yellow", "green"]
         self.face_and_vertices = {}
+        self.colored_vertices = {}
     
-    
-    def coloring_dfs(self, current_face, visited_faces, colored_vertices, graph):
+    def coloring_dfs(self, current_face, visited_faces, graph):
         if current_face in visited_faces:
             return 
         visited_faces.append(current_face)
@@ -21,28 +20,28 @@ class ThreeColoringApp():
         vertex2 = self.face_and_vertices[current_face][1]
         vertex3 = self.face_and_vertices[current_face][2]
     
-        if vertex1 not in colored_vertices and vertex2 not in colored_vertices and vertex3 not in colored_vertices:
-            colored_vertices[vertex1] = "Yellow"
-            colored_vertices[vertex2] = "Green"
-            colored_vertices[vertex3] = "Blue"
-        elif vertex1 not in colored_vertices:
+        if vertex1 not in self.colored_vertices and vertex2 not in self.colored_vertices and vertex3 not in self.colored_vertices:
+            self.colored_vertices[vertex1] = "Yellow"
+            self.colored_vertices[vertex2] = "Green"
+            self.colored_vertices[vertex3] = "Blue"
+        elif vertex1 not in self.colored_vertices:
             colors_list = ["Yellow", "Green", "Blue"]
             for color in colors_list:
-                if colored_vertices[vertex2] != color and colored_vertices[vertex3] != color:
-                    colored_vertices[vertex1] = color
-        elif vertex2 not in colored_vertices:
+                if self.colored_vertices[vertex2] != color and self.colored_vertices[vertex3] != color:
+                    self.colored_vertices[vertex1] = color
+        elif vertex2 not in self.colored_vertices:
             colors_list = ["Yellow", "Green", "Blue"]
             for color in colors_list:
-                if colored_vertices[vertex1] != color and colored_vertices[vertex3] != color:
-                    colored_vertices[vertex2] = color
-        elif vertex3 not in colored_vertices:
+                if self.colored_vertices[vertex1] != color and self.colored_vertices[vertex3] != color:
+                    self.colored_vertices[vertex2] = color
+        elif vertex3 not in self.colored_vertices:
             colors_list = ["Yellow", "Green", "Blue"]
             for color in colors_list:
-                if colored_vertices[vertex2] != color and colored_vertices[vertex1] != color:
-                    colored_vertices[vertex3] = color
+                if self.colored_vertices[vertex2] != color and self.colored_vertices[vertex1] != color:
+                    self.colored_vertices[vertex3] = color
         
         for child_faces in graph[current_face]:
-            self.coloring_dfs(child_faces, visited_faces, colored_vertices, graph)
+            self.coloring_dfs(child_faces, visited_faces, graph)
     
     def three_color_triangulation(self):
         face_and_vertices = {}
@@ -62,12 +61,11 @@ class ThreeColoringApp():
             self.face_and_vertices[face] = vertex_list
             # print(vertex_list)
         visited_faces = []
-        colored_vertices = {}
         starting_face = self.dcel.faces[0]
-        self.coloring_dfs(starting_face, visited_faces, colored_vertices, self.dual_graph_app.graph)
-        for k in colored_vertices:
-            print(f"({k.x}, {k.y}), {colored_vertices[k]}")
-            self.color_vertex(k, colored_vertices[k])
+        self.coloring_dfs(starting_face, visited_faces, self.dual_graph_app.graph)
+        for k in self.colored_vertices:
+            print(f"({k.x}, {k.y}), {self.colored_vertices[k]}")
+            self.color_vertex(k, self.colored_vertices[k])
 
     def color_vertex(self, vertex, color):
         """Draw the vertex with the given color."""

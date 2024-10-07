@@ -25,12 +25,12 @@ class GeneratePolygonApp:
             self.points = self.generate_random_points(self.num_vertices)
             self.points = self.check_for_invalid_edges(self.points)  # Ensure no vertical or horizontal edges
             centroid = self.calculate_centroid(self.points)
-            sorted_points = self.sort_points_anticlockwise(self.points, centroid)
+            self.points = self.sort_points_anticlockwise(self.points, centroid)
             
             # Store the generated polygon in the DCEL
-            self.dcel.construct_polygon(sorted_points)
+            self.dcel.construct_polygon(self.points)
             # Draw the polygon with delay
-            self.draw_polygon_with_delay(sorted_points)
+            self.draw_polygon_with_delay()
 
     def draw_axes(self):
         # Draw positive X and Y axes
@@ -89,13 +89,13 @@ class GeneratePolygonApp:
 
         return sorted(points, key=angle_from_centroid)
 
-    def draw_polygon_with_delay(self, points):
+    def draw_polygon_with_delay(self):
         # Draw each point and line with a delay of 0.4 seconds
         origin_x = self.padding
         origin_y = self.canvas_height - self.padding
 
-        for i in range(len(points)):
-            x, y = points[i]
+        for i in range(len(self.points)):
+            x, y = self.points[i]
             # Adjust coordinates to fit within the positive axes
             adjusted_x = origin_x + x
             adjusted_y = origin_y - y
@@ -104,14 +104,45 @@ class GeneratePolygonApp:
             self.canvas.create_oval(adjusted_x-3, adjusted_y-3, adjusted_x+3, adjusted_y+3, fill="blue")
             
             # Display coordinates next to the point with a smaller font size
-            self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 3))
+            self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 5))
 
             # Update the canvas to show the point and its coordinates
             self.canvas.update()
             # time.sleep(0.4)
 
             # Draw the line connecting the current point to the next one
-            next_point = points[(i + 1) % len(points)]  # Wrap around to first point
+            next_point = self.points[(i + 1) % len(self.points)]  # Wrap around to first point
+            adjusted_next_x = origin_x + next_point[0]
+            adjusted_next_y = origin_y - next_point[1]
+            self.canvas.create_line(adjusted_x, adjusted_y, adjusted_next_x, adjusted_next_y, fill="blue")
+            
+            # Update the canvas to show the connecting line
+            self.canvas.update()
+            # time.sleep(0.4)
+    
+    def draw_polygon_without_delay(self):
+        # Draw each point and line with a delay of 0.4 seconds
+        origin_x = self.padding
+        origin_y = self.canvas_height - self.padding
+
+        for i in range(len(self.points)):
+            x, y = self.points[i]
+            # Adjust coordinates to fit within the positive axes
+            adjusted_x = origin_x + x
+            adjusted_y = origin_y - y
+
+            # Draw the point
+            self.canvas.create_oval(adjusted_x-3, adjusted_y-3, adjusted_x+3, adjusted_y+3, fill="blue")
+            
+            # Display coordinates next to the point with a smaller font size
+            self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 5))
+
+            # Update the canvas to show the point and its coordinates
+            self.canvas.update()
+            # time.sleep(0.4)
+
+            # Draw the line connecting the current point to the next one
+            next_point = self.points[(i + 1) % len(self.points)]  # Wrap around to first point
             adjusted_next_x = origin_x + next_point[0]
             adjusted_next_y = origin_y - next_point[1]
             self.canvas.create_line(adjusted_x, adjusted_y, adjusted_next_x, adjusted_next_y, fill="blue")
