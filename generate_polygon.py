@@ -101,10 +101,10 @@ class GeneratePolygonApp:
             adjusted_y = origin_y - y
 
             # Draw the point
-            self.canvas.create_oval(adjusted_x-3, adjusted_y-3, adjusted_x+3, adjusted_y+3, fill="black")
+            self.canvas.create_oval(adjusted_x-3, adjusted_y-3, adjusted_x+3, adjusted_y+3, fill="blue")
             
             # Display coordinates next to the point with a smaller font size
-            self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 8))
+            self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 3))
 
             # Update the canvas to show the point and its coordinates
             self.canvas.update()
@@ -118,4 +118,4 @@ class GeneratePolygonApp:
             
             # Update the canvas to show the connecting line
             self.canvas.update()
-            time.sleep(0.4)
+            # time.sleep(0.4)

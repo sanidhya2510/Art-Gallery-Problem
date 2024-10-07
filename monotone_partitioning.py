@@ -21,7 +21,7 @@ class MonotonePartitioningApp:
                 self.handle_max_cusp(vertex)
             self.trapezoidal_app.remove_horizontal_line(vertex)
             self.canvas.update()
-            time.sleep(0.4)  # Delay between each step for visualization 
+            # time.sleep(0.4)  # Delay between each step for visualization 
             
 
     def handle_min_cusp(self, vertex):

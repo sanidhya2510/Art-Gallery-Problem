@@ -61,26 +61,44 @@ class TriangulationApp:
             right_chain = []
             
             
-            slope1 = (chain1[1].y-top_vertex.y)/(chain1[1].x-top_vertex.x)
-            slope2 = (chain2[1].y-top_vertex.y)/(chain2[1].x-top_vertex.x)
+            if len(chain1) > 2 and len(chain2) > 2:
+                minx1 = 1e9
+                minx2 = 1e9
+
+                for k in range(1, len(chain1)-1):
+                    minx1 = min(chain1[k].x, minx1)
+                for k in range(1, len(chain2)-1):
+                    minx2 = min(chain2[k].x, minx2)
+
+                if minx1 < minx2:
+                    left_chain = chain1
+                    right_chain = chain2
+                else:
+                    left_chain = chain2
+                    right_chain = chain1
             
-            
-            
-            if slope1 > 0 and slope2 < 0:
-                left_chain = chain1
-                right_chain = chain2
-            
-            elif slope2 > 0 and slope1 < 0:
-                left_chain = chain2
-                right_chain = chain1
-            
-            else:
-                if slope1 > slope2:
+            elif len(chain1) > 2:
+                v1 = top_vertex
+                v2 = chain1[1]
+                v3 = bottom_vertex
+                if ((v3.y-v1.y)/(v3.x-v1.x)>0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) <= 0) or ((v3.y-v1.y)/(v3.x-v1.x)<0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) >= 0):
                     right_chain = chain1
                     left_chain = chain2
-                else: 
+                else:
                     right_chain = chain2
                     left_chain = chain1
+            else:
+                v1 = top_vertex
+                v2 = chain2[1]
+                v3 = bottom_vertex
+                if ((v3.y-v1.y)/(v3.x-v1.x)>0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) <= 0) or ((v3.y-v1.y)/(v3.x-v1.x)<0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) >= 0):
+                    right_chain = chain2
+                    left_chain = chain1
+                else:
+                    right_chain = chain1
+                    left_chain = chain2 
+                                    
+                
             
             print("Left Chain:")
             for vertex in left_chain:
@@ -90,7 +108,7 @@ class TriangulationApp:
             for vertex in right_chain:
                 print(f"Vertex({vertex.x}, {vertex.y})")
                 
-            # sorted_vertices.pop()
+            sorted_vertices.pop()
             for k in sorted_vertices:
                 if k in left_chain and Q[-1] in left_chain:
                     Q.append(k)
@@ -100,6 +118,7 @@ class TriangulationApp:
                             break
                         else:
                             self.monotone_app.draw_diagonal_only(v1, v3)
+                            # time.sleep(0.4)
                             pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
@@ -112,6 +131,7 @@ class TriangulationApp:
                             break
                         else:
                             self.monotone_app.draw_diagonal_only(v1, v3)
+                            # time.sleep(0.4)
                             pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
@@ -120,14 +140,18 @@ class TriangulationApp:
                     Q.pop(0)
                     while len(Q) >= 2:
                         self.monotone_app.draw_diagonal_only(Q[0], k)
+                        # time.sleep(0.4)
                         pending_diagonals.append((Q[0], k))
                         Q.pop(0)
                     self.monotone_app.draw_diagonal_only(Q[0], k)
+                    # time.sleep(0.4)
                     pending_diagonals.append((Q[0], k))
                     Q.append(k)
         
         for (v1, v2) in pending_diagonals:
-            self.dcel.add_diagonal(v1, v2)          
+            self.dcel.add_diagonal(v1, v2)  
+        
+        print(len(self.dcel.faces))        
             
                         
                     
