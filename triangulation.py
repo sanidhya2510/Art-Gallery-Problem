@@ -107,8 +107,13 @@ class TriangulationApp:
             print("Right Chain:")
             for vertex in right_chain:
                 print(f"Vertex({vertex.x}, {vertex.y})")
+            
+            left_chain.pop(0)
+            left_chain.pop()
+            right_chain.pop(0)
+            right_chain.pop()
                 
-            sorted_vertices.pop()
+            # sorted_vertices.pop()
             for k in sorted_vertices:
                 if k in left_chain and Q[-1] in left_chain:
                     Q.append(k)
@@ -117,9 +122,10 @@ class TriangulationApp:
                         if ((v3.y-v1.y)/(v3.x-v1.x)>0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) <= 0) or ((v3.y-v1.y)/(v3.x-v1.x)<0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) >= 0):
                             break
                         else:
-                            self.monotone_app.draw_diagonal_only(v1, v3)
+                            if (v1, v3) not in self.dcel.existing_lines:
+                                self.monotone_app.draw_diagonal_only(v1, v3)
                             # time.sleep(0.4)
-                            pending_diagonals.append((v1, v3))
+                                pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
                             Q.append(u)
@@ -130,22 +136,25 @@ class TriangulationApp:
                         if ((v3.y-v1.y)/(v3.x-v1.x)<0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) <= 0) or ((v3.y-v1.y)/(v3.x-v1.x)>0 and v2.y-v1.y-((v3.y-v1.y)/(v3.x-v1.x))*(v2.x-v1.x) >= 0):
                             break
                         else:
-                            self.monotone_app.draw_diagonal_only(v1, v3)
+                            if (v1, v3) not in self.dcel.existing_lines:
+                                self.monotone_app.draw_diagonal_only(v1, v3)
                             # time.sleep(0.4)
-                            pending_diagonals.append((v1, v3))
+                                pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
                             Q.append(u)
                 else:
                     Q.pop(0)
                     while len(Q) >= 2:
-                        self.monotone_app.draw_diagonal_only(Q[0], k)
-                        # time.sleep(0.4)
-                        pending_diagonals.append((Q[0], k))
+                        if (Q[0], k) not in self.dcel.existing_lines:
+                            self.monotone_app.draw_diagonal_only(Q[0], k)
+                            # time.sleep(0.4)
+                            pending_diagonals.append((Q[0], k))
                         Q.pop(0)
-                    self.monotone_app.draw_diagonal_only(Q[0], k)
-                    # time.sleep(0.4)
-                    pending_diagonals.append((Q[0], k))
+                    if (Q[0], k) not in self.dcel.existing_lines:
+                            self.monotone_app.draw_diagonal_only(Q[0], k)
+                            # time.sleep(0.4)
+                            pending_diagonals.append((Q[0], k))
                     Q.append(k)
         
         for (v1, v2) in pending_diagonals:

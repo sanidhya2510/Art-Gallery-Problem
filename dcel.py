@@ -26,6 +26,7 @@ class DCEL:
         self.vertices = []  
         self.half_edges = []  
         self.faces = []  
+        self.existing_lines = []
 
     def add_vertex(self, x, y):
         vertex = Vertex(x, y)
@@ -33,6 +34,9 @@ class DCEL:
         return vertex
 
     def add_edge(self, v1, v2):
+        self.existing_lines.append((v1, v2))
+        self.existing_lines.append((v2, v1))
+        
         half_edge1 = HalfEdge()
         half_edge2 = HalfEdge()
         
