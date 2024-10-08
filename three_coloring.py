@@ -1,3 +1,4 @@
+import time
 class ThreeColoringApp():
     def __init__(self, canvas, dcel, dual_graph_app):
         self.canvas = canvas
@@ -70,5 +71,7 @@ class ThreeColoringApp():
     def color_vertex(self, vertex, color):
         adjusted_x = self.origin_x + vertex.x
         adjusted_y = self.origin_y - vertex.y
-        self.canvas.create_oval(adjusted_x - 5, adjusted_y - 5, adjusted_x + 5, adjusted_y + 5, fill=color)    
+        self.canvas.create_oval(adjusted_x - 5, adjusted_y - 5, adjusted_x + 5, adjusted_y + 5, fill=color) 
+        self.canvas.update()
+        time.sleep(0.4)   
     

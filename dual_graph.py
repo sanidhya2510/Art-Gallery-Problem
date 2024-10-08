@@ -1,4 +1,4 @@
-import tkinter as tk
+import time
 
 class DualGraphApp:
     def __init__(self, canvas, dcel, triangulation_app):
@@ -80,6 +80,10 @@ class DualGraphApp:
 
     def draw_point(self, x, y, radius=3, color="black"):
         self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill=color)
+        self.canvas.update()
+        time.sleep(0.4)
 
     def draw_line(self, point1, point2, color="black"):
         self.canvas.create_line(point1[0], point1[1], point2[0], point2[1], fill=color)
+        self.canvas.update()
+        time.sleep(0.4)

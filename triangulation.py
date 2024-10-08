@@ -100,13 +100,13 @@ class TriangulationApp:
                                     
                 
             
-            print("Left Chain:")
-            for vertex in left_chain:
-                print(f"Vertex({vertex.x}, {vertex.y})")
+            # print("Left Chain:")
+            # for vertex in left_chain:
+            #     print(f"Vertex({vertex.x}, {vertex.y})")
 
-            print("Right Chain:")
-            for vertex in right_chain:
-                print(f"Vertex({vertex.x}, {vertex.y})")
+            # print("Right Chain:")
+            # for vertex in right_chain:
+            #     print(f"Vertex({vertex.x}, {vertex.y})")
             
             left_chain.pop(0)
             left_chain.pop()
@@ -124,7 +124,7 @@ class TriangulationApp:
                         else:
                             if (v1, v3) not in self.dcel.existing_lines:
                                 self.monotone_app.draw_diagonal_only(v1, v3)
-                            # time.sleep(0.4)
+                                # time.sleep(0.4)
                                 pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
@@ -138,7 +138,7 @@ class TriangulationApp:
                         else:
                             if (v1, v3) not in self.dcel.existing_lines:
                                 self.monotone_app.draw_diagonal_only(v1, v3)
-                            # time.sleep(0.4)
+                                # time.sleep(0.4)
                                 pending_diagonals.append((v1, v3))
                             u = Q.pop()
                             Q.pop()
@@ -158,7 +158,8 @@ class TriangulationApp:
                     Q.append(k)
         
         for (v1, v2) in pending_diagonals:
-            self.dcel.add_diagonal(v1, v2)  
+            self.dcel.add_diagonal(v1, v2)
+            # time.sleep(0.4)  
         
         print(len(self.dcel.faces))        
             

@@ -21,7 +21,7 @@ class MonotonePartitioningApp:
                 self.handle_max_cusp(vertex)
             self.trapezoidal_app.remove_horizontal_line(vertex)
             self.canvas.update()
-            # time.sleep(0.4)  
+            time.sleep(0.4)  
             
 
     def handle_min_cusp(self, vertex):
@@ -122,4 +122,6 @@ class MonotonePartitioningApp:
         adjusted_y2 = self.origin_y - y2
 
         self.canvas.create_line(adjusted_x1, adjusted_y1, adjusted_x2, adjusted_y2, fill="red")
+        self.canvas.update()
+        time.sleep(0.4)
         

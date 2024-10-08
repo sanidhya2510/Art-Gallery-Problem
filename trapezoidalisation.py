@@ -18,7 +18,7 @@ class TrapezoidalisationApp:
         for vertex in vertices:
             self.draw_horizontal_line(vertex)
             self.canvas.update()
-            # time.sleep(0.4)
+            time.sleep(0.4)
 
     def draw_horizontal_line(self, vertex):
         x1 = 0 

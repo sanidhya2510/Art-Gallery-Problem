@@ -89,7 +89,7 @@ class GeneratePolygonApp:
             self.canvas.create_text(adjusted_x + 10, adjusted_y - 10, text=f"({x}, {y})", fill="blue", font=("Arial", 5))
             
             self.canvas.update()
-            # time.sleep(0.4)
+            time.sleep(0.4)
 
             next_point = self.points[(i + 1) % len(self.points)]
             adjusted_next_x = origin_x + next_point[0]
