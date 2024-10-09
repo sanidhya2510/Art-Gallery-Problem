@@ -22,7 +22,6 @@ class GeneratePolygonApp:
             self.canvas.delete("all")
             self.draw_axes()
             self.points = self.generate_random_points(self.num_vertices)
-            # self.points = [(270, 95), (132, 88), (242, 69), (294, 58)]
             self.points = self.check_for_invalid_edges(self.points)
             centroid = self.calculate_centroid(self.points)
             self.points = self.sort_points_anticlockwise(self.points, centroid)
@@ -42,24 +41,34 @@ class GeneratePolygonApp:
 
     def generate_random_points(self, n):
         points = set()
+        x_coords = set()  # To track unique x coordinates
+        y_coords = set()  # To track unique y coordinates
+
         while len(points) < n:
             x = random.randint(0, self.axis_length)
             y = random.randint(0, self.axis_length)
-            points.add((x, y))
 
-        return list(points) 
+            # Ensure x and y are unique
+            if x not in x_coords and y not in y_coords:
+                points.add((x, y))
+                x_coords.add(x)
+                y_coords.add(y)
+
+        return list(points)
 
     def check_for_invalid_edges(self, points):
         def has_invalid_edge(p1, p2):
             return p1[0] == p2[0] or p1[1] == p2[1]
+
         valid_points = points.copy()
         for i in range(len(points)):
             current_point = points[i]
-            next_point = points[(i + 1) % len(points)] 
+            next_point = points[(i + 1) % len(points)]
             if has_invalid_edge(current_point, next_point):
                 while has_invalid_edge(current_point, next_point):
                     next_point = (random.randint(0, self.axis_length), random.randint(0, self.axis_length))
-                valid_points[i] = next_point 
+                    if next_point not in valid_points:
+                        valid_points[i] = next_point
 
         return valid_points
 
@@ -97,8 +106,7 @@ class GeneratePolygonApp:
             self.canvas.create_line(adjusted_x, adjusted_y, adjusted_next_x, adjusted_next_y, fill="blue")
             
             self.canvas.update()
-            # time.sleep(0.4)
-    
+
     def draw_polygon_without_delay(self):
         origin_x = self.padding
         origin_y = self.canvas_height - self.padding

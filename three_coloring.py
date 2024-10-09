@@ -24,19 +24,19 @@ class ThreeColoringApp():
         if vertex1 not in self.colored_vertices and vertex2 not in self.colored_vertices and vertex3 not in self.colored_vertices:
             self.colored_vertices[vertex1] = "Yellow"
             self.colored_vertices[vertex2] = "Green"
-            self.colored_vertices[vertex3] = "Blue"
+            self.colored_vertices[vertex3] = "Pink"
         elif vertex1 not in self.colored_vertices:
-            colors_list = ["Yellow", "Green", "Blue"]
+            colors_list = ["Yellow", "Green", "Pink"]
             for color in colors_list:
                 if self.colored_vertices[vertex2] != color and self.colored_vertices[vertex3] != color:
                     self.colored_vertices[vertex1] = color
         elif vertex2 not in self.colored_vertices:
-            colors_list = ["Yellow", "Green", "Blue"]
+            colors_list = ["Yellow", "Green", "Pink"]
             for color in colors_list:
                 if self.colored_vertices[vertex1] != color and self.colored_vertices[vertex3] != color:
                     self.colored_vertices[vertex2] = color
         elif vertex3 not in self.colored_vertices:
-            colors_list = ["Yellow", "Green", "Blue"]
+            colors_list = ["Yellow", "Green", "Pink"]
             for color in colors_list:
                 if self.colored_vertices[vertex2] != color and self.colored_vertices[vertex1] != color:
                     self.colored_vertices[vertex3] = color
