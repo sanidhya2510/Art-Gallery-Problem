@@ -93,8 +93,9 @@ def vertex_guards():
 
 root = tk.Tk()
 root.title("Art Gallery Problem")
-root.geometry("800x600")
 
+root.geometry(f"800x600")
+root.resizable(False, False)
 canvas_frame = tk.Frame(root)
 canvas_frame.pack(side=tk.LEFT, padx=20, pady=20)
 
