@@ -96,8 +96,8 @@ Once the GUI window opens, you can:
 - **Monotone Partitioning**: Partition the polygon into monotone pieces.
 - **Triangulation**: Triangulate the polygon.
 - **Dual Graph Generation**: Create a dual graph from the decomposition.
-- **Vertex Guards**: Calculate the minimal number of vertex guards needed.
 - **Three Coloring**: Apply a three-coloring algorithm to the triangulated polygon.
+- **Vertex Guards**: Calculate the minimal number of vertex guards needed.
 
 ## License
 
