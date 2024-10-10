@@ -38,8 +38,6 @@ Before running the project, ensure you have the following installed:
 
 - Python 3.8+
 - Tkinter (for GUI)
-- Any additional libraries mentioned in the `requirements.txt` (if available)
-
 If Tkinter is not installed, you can install it via:
 
 ```bash
