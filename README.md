@@ -57,7 +57,7 @@ To run the main file, follow these steps:
 1. Clone the repository or download the files into a folder:
 
 ```bash
-git clone https://github.com/your-repo/art-gallery-problem-visualization.git
+git clone https://github.com/sanidhya2510/Art-Gallery-Problem
 cd art-gallery-problem-visualization
 ```
 
