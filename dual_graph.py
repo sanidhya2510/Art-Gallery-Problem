@@ -1,3 +1,6 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#dual_graph.py - Contains the algorithm for generating a dual graph of triangulation
 import time
 
 class DualGraphApp:

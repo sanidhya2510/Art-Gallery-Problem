@@ -1,3 +1,6 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#three_coloring.py - Contains the Algorithm for three coloring the polygon
 import time
 class ThreeColoringApp():
     def __init__(self, canvas, dcel, dual_graph_app):

@@ -58,7 +58,7 @@ To run the main file, follow these steps:
 
 ```bash
 git clone https://github.com/sanidhya2510/Art-Gallery-Problem
-cd art-gallery-problem-visualization
+cd art-gallery-problem
 ```
 
 2. (Optional) Create a virtual environment and activate it:

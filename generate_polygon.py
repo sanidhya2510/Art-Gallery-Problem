@@ -1,3 +1,7 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#generate_polygon.py - Contains the algorithm for generating random polygon
+
 import random
 import time
 import math

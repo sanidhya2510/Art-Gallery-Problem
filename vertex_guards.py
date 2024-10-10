@@ -1,3 +1,6 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#vertex_gurads.py - Finds vertex guards
 class VertexGuardsApp():
     def __init__(self, canvas, dcel, three_coloring_app):
         self.canvas = canvas

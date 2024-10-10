@@ -1,3 +1,7 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#trapezoidalisation.py - Contains the algorithm for creating trapezoids in polygon
+
 import time
 
 class TrapezoidalisationApp:

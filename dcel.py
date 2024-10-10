@@ -1,3 +1,6 @@
+#Group-5 - 21114090_21112103 - Sanidhya Bhatia and Shrey Gupta
+#Date - 5th October 2024
+#dcel.py - Contains the DCEL Class
 import math
 
 class Vertex:
@@ -19,7 +22,6 @@ class HalfEdge:
 class Face:
     def __init__(self):
         self.outer_half_edge = None 
-        self.number = 0
 
 class DCEL:
     def __init__(self):
